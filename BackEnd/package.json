@@ -1,0 +1,22 @@
+{
+    "name": "Jedi",
+    "version": "0.0.1",
+    "description": "Server of Jedi",
+    "main": "app.js",
+    "scripts": {
+        "start": "node app.js",
+        "test": "mocha"
+    },
+    "dependencies": {
+        "koa": "2.0.0",
+        "koa-router": "7.0.0",
+        "koa-bodyparser": "3.2.0",
+        "koa-logger": "3.2.0",
+        "mongoose": "^5.2.7"
+    },
+    "devDependencies": {
+        "mocha": "3.0.2"
+    },
+    "author": "plantree <eric.wangpy@outlook.com>",
+    "license": "MIT"
+}
