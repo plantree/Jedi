@@ -8,10 +8,12 @@
         "test": "mocha"
     },
     "dependencies": {
-        "koa": "2.0.0",
-        "koa-router": "7.0.0",
+        "koa": "^2.13.0",
         "koa-bodyparser": "3.2.0",
+        "koa-ejs": "4.3.0",
         "koa-logger": "3.2.0",
+        "koa-router": "7.0.0",
+        "koa-compress": "4.0.1",
         "mongoose": "^5.2.7"
     },
     "devDependencies": {
