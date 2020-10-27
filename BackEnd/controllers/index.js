@@ -3,8 +3,9 @@
 const router = require("koa-router")();
 
 router.get("/", async (ctx, next) => {
-    ctx.response.type = "text/html";
-    ctx.response.body = "<h1>Hello, koa2!</h1>";
+    // ctx.response.type = "text/html";
+    // ctx.response.body = "<h1>Hello, koa2!</h1>";
+    ctx.redirect("/index.html");
 });
 
 router.get("/users", async(ctx, next) => {

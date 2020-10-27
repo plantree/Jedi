@@ -16,5 +16,6 @@
 #### 过程记录
 
 - [x] 2020.10.22 搭建基础框架，MVC解耦
-- [ ] 2020.10.26 增加EJS render、Compress
+- [x] 2020.10.26 增加EJS render、Compress
+- [ ] 静态文件
 - [ ] 

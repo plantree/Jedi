@@ -1,15 +1,18 @@
 'use strict';
 
 const path = require("path");
+const http = require("http");
+const https = require("https");
 const Koa = require("koa");
 const logger = require("koa-logger");
 const render = require("koa-ejs");
 const compress = require("koa-compress");
+const send = require("koa-send");
 const controller = require("./controller");
 
 let app = new Koa();
 
-// error debug
+// error handling
 app.on("error", function(err) {
     console.log(err.stack);
 });
@@ -19,9 +22,9 @@ app.use(logger());
 
 // add compression
 app.use(compress({
-    // filter (content_type) {
-    //     return /text/i.test(content_type)
-    // },
+    filter (content_type) {
+        return /text/i.test(content_type)
+    },
     threshold: 2048,
     gzip: {
         flush: require("zlib").constants.Z_SYNC_FLUSH
@@ -32,7 +35,7 @@ app.use(compress({
     br: false   // disable brotli
 }));
 
-// before serve rquest
+// before serve request
 app.use(function (ctx, next) {
     ctx.state = ctx.state || {};
     ctx.state.now = new Date();
@@ -59,5 +62,12 @@ render(app, {
     async: true
 });
 
-app.listen(3000);
+// server static files
+app.use(async(ctx) => {
+    await send(ctx, ctx.path, {root: path.join(__dirname, "public")});
+});
+
+http.createServer(app.callback()).listen(3000);
+// TODO: https
+// https.createServer(app.callback()).listen(3001);
 console.log("app starts at port 3000...");
