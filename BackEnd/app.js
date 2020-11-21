@@ -8,7 +8,7 @@ const logger = require("koa-logger");
 const render = require("koa-ejs");
 const compress = require("koa-compress");
 const send = require("koa-send");
-const controller = require("./controller");
+const controller = require("./utils/controller");
 
 let app = new Koa();
 
@@ -67,7 +67,8 @@ app.use(async(ctx) => {
     await send(ctx, ctx.path, {root: path.join(__dirname, "public")});
 });
 
-http.createServer(app.callback()).listen(3000);
+http.createServer(app.callback()).listen(3000, () => {
+    console.log("app starts at port 3000...");
+});
 // TODO: https
 // https.createServer(app.callback()).listen(3001);
-console.log("app starts at port 3000...");

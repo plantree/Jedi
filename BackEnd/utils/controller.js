@@ -3,9 +3,9 @@
 const fs = require("fs");
 const path = require("path");
 
-function addControllers(dir) {
+function addControllers() {
     // scan the directory of controller
-    let files = fs.readdirSync(path.join(__dirname, dir));
+    let files = fs.readdirSync(path.join(__dirname, "..", "controllers"));
 
     // filter .js
     let js_files = files.filter((item) => {
@@ -16,12 +16,12 @@ function addControllers(dir) {
     for (let item of js_files) {
         console.log(`process controllers: ${item}...`);
         // get .js file
-        let mapping = require(path.join(__dirname, dir, item));
+        let mapping = require(path.join(__dirname, "..", "controllers", item));
         routers.push(mapping);
     }
     return routers;
 }
 
-module.exports = function(dir = "controllers") {
-    return addControllers(dir);
+module.exports = function() {
+    return addControllers();
 }

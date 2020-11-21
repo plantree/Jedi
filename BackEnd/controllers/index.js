@@ -1,6 +1,9 @@
 'use strict';
 
 const router = require("koa-router")();
+const mongoose = require("../utils/db");
+const { Schema, model } = mongoose;
+
 
 router.get("/", async (ctx, next) => {
     // ctx.response.type = "text/html";
