@@ -35,7 +35,7 @@ jobs:
       
       # Change directory
       - name: Change to BackEnd
-        run: cd ./Backend
+        run: cd ./BackEnd
         
       # Run
       - name: Install Dependencies
