@@ -32,7 +32,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{matrix.node-version}}
-
+      
+      # Change directory
+      - name: Change to BackEnd
+        run: cd ./Backend
+        
       # Run
       - name: Install Dependencies
         run: npm install
