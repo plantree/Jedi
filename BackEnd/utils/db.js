@@ -148,41 +148,44 @@ async function addComment(title, commentContent) {
     }
 }
 
-function addCommentVote(blogModel, title, date) {
-    blogModel.updateOne({title: title, "comment.date": date}, {$inc: {"comment.$.vote": 1}}, function (err, res) {
-        if (err) {
-            handleBlogError(err);
-        } 
+async function addCommentVote(title, date) {
+    try {
+        let res = await blogModel.updateOne({title: title, "comment.date": date}, {$inc: {"comment.$.vote": 1}});
         console.log(`add blog '${title}.${date}' a comment vote, return: ${JSON.stringify(res)}`);
-    });
+        return [true, res];
+    } catch (err) {
+        return handleBlogError(err);
+    }
 }
 
-function addViewCount(blogModel, title) {
-    blogModel.updateOne({title: title}, {$inc: {viewCount: 1}}, function (err, res) {
-        if (err) {
-            handleBlogError(err);
-        }
-        console.log(`add blog '${title}' view_count, return: ${JSON.stringify(res)}`);
-    });
+async function addViewCount(title) {
+    try {
+        let res = await blogModel.updateOne({title: title}, {$inc: {viewCount: 1}});
+        console.log(`add blog '${title}' viewCount, return: ${JSON.stringify(res)}`);
+        return [true, res];
+    } catch (err) {
+        return handleBlogError(err);
+    }
 }
 
-function addLike(blogModel, title) {
-    blogModel.updateOne({title: title}, {$inc: {"like": 1}}, function (err, res) {
-        if (err) {
-            console.error(err);
-            return;
-        }
+async function addLike(title) {
+    try {
+        let res = await blogModel.updateOne({title: title}, {$inc: {"like": 1}});
         console.log(`add blog '${title}' like, return: ${JSON.stringify(res)}`);
-    });
+        return [true, res];
+    } catch (err) {
+        return handleBlogError(err);
+    }
 }
 
-function addDislike(blogModel, title) {
-    blogModel.updateOne({title: title}, {$inc: {"dislike": 1}}, function (err, res) {
-        if (err) {
-            handleBlogError(err);
-        }
+async function addDislike(title) {
+    try {
+        let res = await blogModel.updateOne({title: title}, {$inc: {"dislike": 1}});
         console.log(`add blog '${title}' dislike, return: ${JSON.stringify(res)}`);
-    });
+        return [true, res];
+    } catch (err) {
+        return handleBlogError(err);
+    }
 }
 
 /**
@@ -191,9 +194,30 @@ function addDislike(blogModel, title) {
 async function findByTitle(title) {
     try {
         let res = await blogModel.findOne({title: title});
+        console.log(`find by title: '${title}'`);
         return [true, res];
     } catch (err) {
-        handleBlogError(e);
+        return handleBlogError(e);
+    }
+}
+
+async function findByCategory(category) {
+    try {
+        let res = await blogModel.find({category: category});
+        console.log(`find by category: '${category}'`);
+        return [true, res];
+    } catch (err) {
+        return handleBlogError(err);
+    }
+}
+
+async function findByTag(tag) {
+    try {
+        let res = await blogModel.find({tags: tag});
+        console.log(`find by tag: '${tag}'`);
+        return [true, res];
+    } catch (err) {
+        return handleBlogError(err);
     }
 }
 
@@ -215,4 +239,7 @@ module.exports = {
     "addLike": addLike,
     "addDislike": addDislike,
     "findByTitle": findByTitle,
+    "findByCategory": findByCategory,
+    "findByTag": findByTag,
+
 }

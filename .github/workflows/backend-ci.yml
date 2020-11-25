@@ -21,6 +21,7 @@ jobs:
     strategy:
       matrix:
         node-version: [10.x, 12.x]
+        mongo-version: [4.2, 4.4]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -33,14 +34,16 @@ jobs:
         with:
           node-version: ${{matrix.node-version}}
       
-      # Change directory
-      - name: Change to BackEnd
-        run: cd ./BackEnd
-        
+      # Setup MongoDB version
+      - name: Setup Mongo ${{matrix.mongo-version}}
+        uses: supercharge/mongodb-github-action@1.2.0
+        with:
+          mongo-version: ${{matrix.mongo-version}}
+          
       # Run
       - name: Install Dependencies
-        run: npm install
+        run: cd ./BackEnd && npm install
       
       # Test
       - name: Run test
-        run: npm test
+        run: cd ./BackEnd && npm test

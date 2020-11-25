@@ -2,7 +2,7 @@
  * @Author: py.wang 
  * @Date: 2020-11-12 10:59:25 
  * @Last Modified by: py.wang
- * @Last Modified time: 2020-11-20 12:07:00
+ * @Last Modified time: 2020-11-24 11:14:54
  */
 'use test';
 
@@ -182,7 +182,67 @@ describe("#db.js", () => {
         assert.strictEqual(blog[1]["comment"][0]["name"], "plantree");
         connect[1].disconnect();
     });
-    
+
+    it ("addCommentVote should be successful", async () => {
+        let connect = await db.mongoConnect();
+        if (!connect[0]) {
+            return;
+        }
+        let blog = await db.findByTitle("Hello World");
+        let date = blog[1]["comment"][0]["date"];
+        let res = await db.addCommentVote("Hello World", date);
+        assert.strictEqual(res[0], true);
+        assert.strictEqual(res[1]["nModified"], 1);
+        blog = await db.findByTitle("Hello World");
+        assert.strictEqual(blog[1]["comment"][0]["vote"], 1);
+        connect[1].disconnect();
+    });
+
+    it ("addViewCount, addLike & addDislike should be successful", async () => {
+        let connect = await db.mongoConnect();
+        if (!connect[0]) {
+            return;
+        }
+        let resView = await db.addViewCount("Hello World");
+        let resLike = await db.addLike("Hello World");
+        let resDislike = await db.addDislike("Hello World");
+        assert.strictEqual(resView[1]["nModified"], 1);
+        assert.strictEqual(resLike[1]["nModified"], 1);
+        assert.strictEqual(resDislike[1]["nModified"], 1);
+        blog = await db.findByTitle("Hello World");
+        assert.strictEqual(blog[1]["viewCount"], 1);
+        assert.strictEqual(blog[1]["like"], 1);
+        assert.strictEqual(blog[1]["dislike"], 1);
+        connect[1].disconnect();
+    });
+
+    it ("findByCategory should be successful", async () => {
+        let connect = await db.mongoConnect();
+        if (!connect[0]) {
+            return;
+        }
+        let res = await db.findByCategory("Test");
+        assert.strictEqual(res[1].length, 1);
+        assert.strictEqual(res[1][0]["title"], "Hello World");
+        
+        res = await db.findByCategory("test");
+        assert.strictEqual(res[1].length, 0);
+        connect[1].disconnect();
+    });
+
+    it ("findByTag should be successful", async () => {
+        let connect = await db.mongoConnect();
+        if (!connect[0]) {
+            return;
+        }
+        let res = await db.findByTag("hello");
+        assert.strictEqual(res[1].length, 1);
+        assert.strictEqual(res[1][0]["title"], "Hello World");
+        
+        res = await db.findByTag("test");
+        assert.strictEqual(res[1].length, 0);
+        connect[1].disconnect();
+    });
 });
 
 
