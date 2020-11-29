@@ -4,6 +4,7 @@ const path = require("path");
 const http = require("http");
 const https = require("https");
 const Koa = require("koa");
+const bodyParser = require("koa-bodyparser");
 const logger = require("koa-logger");
 const render = require("koa-ejs");
 const compress = require("koa-compress");
@@ -14,11 +15,16 @@ let app = new Koa();
 
 // error handling
 app.on("error", function(err) {
-    console.log(err.stack);
+    console.error(err.stack);
 });
 
+/**
+ * Middleware
+ */
 // add logger
 app.use(logger());
+
+app.use(bodyParser());
 
 // add compression
 app.use(compress({
@@ -63,7 +69,7 @@ render(app, {
 });
 
 // server static files
-app.use(async(ctx) => {
+app.use(async (ctx) => {
     await send(ctx, ctx.path, {root: path.join(__dirname, "public")});
 });
 

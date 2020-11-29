@@ -41,8 +41,20 @@ function parseMetaBody(path) {
     return res;
 }
 
-// console.log(parseMetaBody("../source/_posts/hello-world.md"));
+function validateParsedBlog(blog) {
+    let res = true;
+    let requiredFields = ["title", "author", "category", "tags", 
+                        "publishDate", "updateDate", "body"];
+    for (let field of requiredFields) {
+        if (!blog.hasOwnProperty(field)) {
+            res = false;
+            break;
+        }
+    }
+    return res;
+}
 
 module.exports = {
-    "parseMetaBody": parseMetaBody
+    "parseMetaBody": parseMetaBody,
+    "validateParsedBlog": validateParsedBlog,
 }

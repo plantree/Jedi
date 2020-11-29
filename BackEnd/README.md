@@ -19,5 +19,7 @@
 - [x] 2020.10.26 增加EJS render、Compress
 - [x] 2020.11.03 静态文件
 - [x] 2020.11.24 db测试
-- [ ] github action 数据库
+- [x] 2020.11.25 github action 数据库
 - [ ] swagger确定接口
+- [x] 2020.11.27 廖雪峰MVVM、RESTful
+- [ ] log日志

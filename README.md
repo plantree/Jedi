@@ -1,5 +1,5 @@
 # Jedi
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)![backend-ci](https://github.com/plantree/Jedi/workflows/backend-ci/badge.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![backend-ci](https://github.com/plantree/Jedi/workflows/backend-ci/badge.svg)
 
 #### 背景
 
