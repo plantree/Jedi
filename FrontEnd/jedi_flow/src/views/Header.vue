@@ -1,10 +1,22 @@
 <template>
     <div>
         <div id="nav">
-            <router-link to="/">Home</router-link> |    
-            <router-link to="/categories">Categories</router-link> |    
-            <router-link to="/tags">Tags</router-link> |     
-            <router-link to="/about">About</router-link> | 
+            <div class="nav_name">
+                <router-link to="/">Home首页</router-link>
+            </div>
+            <div class="nav_name">
+                <router-link to="/categories">Categories分类</router-link>
+            </div>
+            <div class="nav_name">
+                <router-link to="/tags">Tags归档</router-link> 
+            </div>
+            <div class="nav_name">
+                <router-link to="/about">About关于</router-link>
+            </div>
+            <!-- <div class="nav_name">
+
+            </div> -->
+
         </div>
     </div>
 </template>
@@ -17,7 +29,10 @@ export default {
 
 <style>
 #nav {
-    padding: 30px;
+    background-color: beige;
+    padding: 25px 15%;
+    display: flex;
+    justify-content: space-around;
 }
 
 #nav a {

@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import CateLeft from "@/components/for-categories/CateLeft.vue";
-import CateRight from "@/components/for-categories/CateRight.vue";
+import CateLeft from "@/components/Categories/CateLeft.vue";
+import CateRight from "@/components/Categories/CateRight.vue";
 export default {
     name: "Categories",
     components: { CateLeft, CateRight },

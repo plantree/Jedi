@@ -1,6 +1,7 @@
 <template>
     <div id="app">
         <Header></Header>
+        <!-- <el-button>注册</el-button> -->
         <router-view />
     </div>
 </template>
@@ -16,6 +17,15 @@ export default {
 </script>
 
 <style>
+html,body{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;   
+    width: 100%;
+    height: 100%; 
+    background-color: rgb(170, 194, 143);
+
+}
 #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
