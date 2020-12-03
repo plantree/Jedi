@@ -1,28 +1,47 @@
 'use strict';
 
 const path = require("path");
+const fs = require("fs");
 const http = require("http");
 const https = require("https");
 const Koa = require("koa");
 const bodyParser = require("koa-bodyparser");
-const logger = require("koa-logger");
 const render = require("koa-ejs");
 const compress = require("koa-compress");
-const send = require("koa-send");
-const controller = require("./utils/controller");
+const static_ = require("koa-static");
+const Router = require("koa-router");
+const router = new Router();
 
 let app = new Koa();
-
-// error handling
-app.on("error", function(err) {
-    console.error(err.stack);
-});
 
 /**
  * Middleware
  */
 // add logger
-app.use(logger());
+app.use(async (ctx, next) => {
+    ctx.util = {
+        log: require("./utils/log")
+    };
+    // error handling
+    app.on("error", (err) => {
+        ctx.util.log.error(err.stack);
+    });
+    await next();
+});
+
+app.use(async (ctx, next) => {
+    await next();
+    const rt = ctx.response.get('X-Response-Time');
+    ctx.util.log.info(`${ctx.method} ${ctx.url} ${ctx.ip} - ${ctx.status} ${ctx.message} ${rt}`);
+});
+
+// x-response-time
+app.use(async (ctx, next) => {
+    const start = Date.now();
+    await next();
+    const ms = Date.now() - start;
+    ctx.set('X-Response-Time', `${ms}ms`);
+});
 
 app.use(bodyParser());
 
@@ -41,22 +60,31 @@ app.use(compress({
     br: false   // disable brotli
 }));
 
-// before serve request
-app.use(function (ctx, next) {
-    ctx.state = ctx.state || {};
-    ctx.state.now = new Date();
-    ctx.state.ip = ctx.request.ip;
-    ctx.state.version = "2.0.0";
-    return next();
+// 404 handler
+app.use(async (ctx, next) => {
+    await next();
+    if (parseInt(ctx.status) === 404) {
+        ctx.response.redirect("/404");
+    }
 });
 
 // add controllers
-for (let router of controller()) {
-    if (typeof router !== "function") {
-        continue;
+let controllers = fs.readdirSync(__dirname + "/controllers");
+controllers.forEach((item) => {
+    if (!item.endsWith(".js")) {
+        return true;
     }
-    app.use(router());
-}
+    let controller = require(__dirname + "/controllers/" + item.replace(".js", ""));
+    // add to router
+    if (item === "index.js") {
+        router.use("/", controller.routes(),  
+                controller.allowedMethods());
+    } else {
+        router.use("/" + item.replace(".js", ""), controller.routes(),  
+                controller.allowedMethods());
+    }
+});
+app.use(router.routes());
 
 // add render
 render(app, {
@@ -69,9 +97,9 @@ render(app, {
 });
 
 // server static files
-app.use(async (ctx) => {
-    await send(ctx, ctx.path, {root: path.join(__dirname, "public")});
-});
+app.use(static_(
+    path.join(__dirname, "./public")
+));
 
 http.createServer(app.callback()).listen(3000, () => {
     console.log("app starts at port 3000...");

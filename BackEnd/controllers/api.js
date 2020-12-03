@@ -1,11 +1,14 @@
 'use strict';
 
 const Router = require("koa-router");
+const api = new Router();
 
-const router = new Router({
-    prefix: "/api"
+api.get("/", async (ctx, next) => {
+    ctx.body = "api";
 });
 
-module.exports = function() {
-    return router.routes();
-}
+api.get("/v1", async (ctx, next) => {
+    ctx.body = "api v1";
+});
+
+module.exports = api;

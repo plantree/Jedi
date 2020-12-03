@@ -22,4 +22,9 @@
 - [x] 2020.11.25 github action 数据库
 - [ ] swagger确定接口
 - [x] 2020.11.27 廖雪峰MVVM、RESTful
-- [ ] log日志
+- [x] 2020.12.02 log日志
+- [x] 2020.12.03 koa-router/koa学习，404处理
+
+#### 参考
+- https://www.jmjc.tech/less/125
+- 
