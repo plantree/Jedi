@@ -1,3 +1,10 @@
+/*
+ * @Author: py.wang 
+ * @Date: 2020-12-08 10:45:08 
+ * @Last Modified by: py.wang
+ * @Last Modified time: 2020-12-09 11:10:55
+ */
+
 'use strict';
 
 const path = require("path");
@@ -10,29 +17,24 @@ const render = require("koa-ejs");
 const compress = require("koa-compress");
 const static_ = require("koa-static");
 const Router = require("koa-router");
+const logger = require("./utils/log");
 const router = new Router();
 
 let app = new Koa();
+
+// error handling
+app.on("error", (err) => {
+    logger.error(err.stack);
+});
 
 /**
  * Middleware
  */
 // add logger
 app.use(async (ctx, next) => {
-    ctx.util = {
-        log: require("./utils/log")
-    };
-    // error handling
-    app.on("error", (err) => {
-        ctx.util.log.error(err.stack);
-    });
-    await next();
-});
-
-app.use(async (ctx, next) => {
     await next();
     const rt = ctx.response.get('X-Response-Time');
-    ctx.util.log.info(`${ctx.method} ${ctx.url} ${ctx.ip} - ${ctx.status} ${ctx.message} ${rt}`);
+    logger.info(`${ctx.method} ${ctx.url} ${ctx.ip} - ${ctx.status} ${ctx.message} ${rt}`);
 });
 
 // x-response-time

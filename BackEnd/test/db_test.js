@@ -2,7 +2,7 @@
  * @Author: py.wang 
  * @Date: 2020-11-12 10:59:25 
  * @Last Modified by: py.wang
- * @Last Modified time: 2020-11-24 11:14:54
+ * @Last Modified time: 2020-12-10 11:03:50
  */
 'use test';
 
@@ -12,7 +12,7 @@
 const assert = require("assert");
 const db = require("../utils/db");
 const { parseMetaBody } = require("../utils/parseMarkdown");
-const path = "./source/_posts/hello-world.md";
+const path = "./source/_post/hello-world.md";
 
 function compareArray(lhs, rhs) {
     if (lhs.length !== rhs.length) {
@@ -216,6 +216,16 @@ describe("#db.js", () => {
         connect[1].disconnect();
     });
 
+    it ("findByTitle should be faield", async () => {
+        let connect = await db.mongoConnect();
+        if (!connect[0]) {
+            return;
+        }
+        let res = await db.findByTitle("Test");
+        assert(res[0], true);
+        assert(res[0], null);
+        connect[1].disconnect();
+    });
     it ("findByCategory should be successful", async () => {
         let connect = await db.mongoConnect();
         if (!connect[0]) {
@@ -241,6 +251,16 @@ describe("#db.js", () => {
         
         res = await db.findByTag("test");
         assert.strictEqual(res[1].length, 0);
+        connect[1].disconnect();
+    });
+
+    it ("clear all", async ()=> {
+        let connect = await db.mongoConnect();
+        if (!connect[0]) {
+            return;
+        }
+        let res = await db.blogClear();
+        assert.strictEqual(res[0], true);
         connect[1].disconnect();
     });
 });

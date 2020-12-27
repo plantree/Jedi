@@ -2,7 +2,7 @@
 
 const fs = require("fs");
 // parse meta
-const marked = require("./marked_extend");
+const marked = require("./markedExtend");
 const yaml = require("yaml");
 
 function parseMetaBody(path) {
