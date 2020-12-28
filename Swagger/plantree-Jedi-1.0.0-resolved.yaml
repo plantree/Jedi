@@ -1,0 +1,281 @@
+---
+swagger: "2.0"
+info:
+  description: This is a simple API about Jedi
+  version: 1.0.0
+  title: Jedi API
+  contact:
+    email: eric.wangpy@outlook.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+host: virtserver.swaggerhub.com
+basePath: /plantree/Jedi/1.0.0
+tags:
+- name: admins
+  description: Secured Admin-only calls
+- name: developers
+  description: Operations available to regular developers
+- name: users
+  description: Operations available to normal users
+schemes:
+- https
+- http
+paths:
+  /blog:
+    get:
+      tags:
+      - users
+      summary: get all blogs that have been published
+      description: You can get all blogs without any parameters
+      operationId: getAllBlogs
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        "200":
+          description: all the information of blogs
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/BlogItem'
+  /blog/{year}:
+    get:
+      tags:
+      - users
+      summary: get all blogs that have been published by a year
+      description: You can get all blogs without any parameters during the given year
+      operationId: getBlogsByYear
+      produces:
+      - application/json
+      parameters:
+      - name: year
+        in: path
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: all blogs during the year
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/BlogItem'
+  /blog/{year}/{month}:
+    get:
+      tags:
+      - users
+      summary: get all blogs that have been published by a year and month
+      description: You can get all blogs without any parameters by a year and month
+      operationId: getBlogsByYearAndMonth
+      produces:
+      - application/json
+      parameters:
+      - name: year
+        in: path
+        required: true
+        type: integer
+      - name: month
+        in: path
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: all blogs during the year and month
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/BlogItem'
+  /blog/{year}/{month}/{article}:
+    get:
+      tags:
+      - users
+      summary: get an accurate blog
+      description: You can get a blog
+      operationId: getBlogByName
+      produces:
+      - application/json
+      parameters:
+      - name: year
+        in: path
+        required: true
+        type: integer
+      - name: month
+        in: path
+        required: true
+        type: integer
+      - name: article
+        in: path
+        required: true
+        type: string
+      responses:
+        "200":
+          description: one blog
+          schema:
+            $ref: '#/definitions/Blog'
+  /category:
+    get:
+      tags:
+      - users
+      summary: get all categories
+      description: You can get all categories without any parameters
+      operationId: getAllCategories
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        "200":
+          description: all the information of category
+          schema:
+            $ref: '#/definitions/CategoryItem'
+  /category/{categoryName}:
+    get:
+      tags:
+      - users
+      summary: get the category by name
+      description: You can get the category by the name of category
+      operationId: getCategoryByName
+      produces:
+      - application/json
+      parameters:
+      - name: categoryName
+        in: path
+        required: true
+        type: string
+      responses:
+        "200":
+          description: all the information of the given category
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/CategoryItem'
+  /tag:
+    get:
+      tags:
+      - users
+      summary: get all tags
+      description: You can get all tags without any parameters
+      operationId: getAllTags
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        "200":
+          description: all the information of category
+          schema:
+            $ref: '#/definitions/TagItem'
+  /tag/{tagName}:
+    get:
+      tags:
+      - users
+      summary: get the tag by name
+      description: You can get all categories without any parameters
+      operationId: getTagByName
+      produces:
+      - application/json
+      parameters:
+      - name: tagName
+        in: path
+        required: true
+        type: string
+      responses:
+        "200":
+          description: all the information of given tag
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/TagItem'
+definitions:
+  BlogItem:
+    type: object
+    required:
+    - category
+    - id
+    - publishDate
+    - tag
+    - title
+    properties:
+      id:
+        type: string
+        format: uuid
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      title:
+        type: string
+        example: Hello world.md
+      publishDate:
+        type: string
+        format: date-time
+        example: 2016-08-29T09:12:33.001+0000
+      category:
+        type: string
+        example: algorithm
+      tag:
+        type: array
+        example:
+        - redis
+        - leveldb
+        items:
+          type: string
+  Blog:
+    type: object
+    required:
+    - body
+    - category
+    - comment_count
+    - id
+    - publishDate
+    - tag
+    - title
+    - view_count
+    properties:
+      id:
+        type: string
+        format: uuid
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      title:
+        type: string
+        example: Hello world.md
+      publishDate:
+        type: string
+        format: date-time
+        example: 2016-08-29T09:12:33.001+0000
+      category:
+        type: string
+        example: algorithm
+      tag:
+        type: array
+        example:
+        - redis
+        - leveldb
+        items:
+          type: string
+      view_count:
+        type: integer
+        example: 102
+      comment_count:
+        type: integer
+        example: 14
+      body:
+        type: string
+        example: Hello world
+  CategoryItem:
+    type: object
+    required:
+    - blogItems
+    - name
+    properties:
+      name:
+        type: string
+        example: Algorithms
+      blogItems:
+        $ref: '#/definitions/BlogItem'
+  TagItem:
+    type: object
+    required:
+    - blogItems
+    - name
+    properties:
+      name:
+        type: string
+        example: Vue
+      blogItems:
+        $ref: '#/definitions/BlogItem'
